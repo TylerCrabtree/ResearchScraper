@@ -8,15 +8,25 @@ from unidecode import unidecode
 
 
 #This grabs information off a typical wiki page
-def ultraGeneric(topic):
+def ultraGeneric(topic, target):
     warnings.filterwarnings('ignore')
     topic = wikipedia.page(topic)                  # get page
     print("Title :" + topic.title)                 # print title
+    target.write("Title :" + topic.title+"\n")
     print("Summary :" + topic.summary)             # print summary
+    
+    sum =("Summary :" + topic.summary+"\n").encode('utf-8')
+    target.write(sum)
     print("Image: " + topic.images[0])             # print image
+    target.write("Image: " + topic.images[0]+"\n")
+
     print("Categories: " + topic.categories[1]+ \
     ", "  + topic.categories[0] + ", " \
     + topic.categories[2])                         # print categories
+    target.write("Categories: " + topic.categories[1]+ \
+    ", "  + topic.categories[0] + ", " \
+    + topic.categories[2]+"\n")
+
     title = topic.title                            #save variable names, get title
     summary = topic.summary                        #get summary
     image = topic.images[0]                        #get image
@@ -24,6 +34,8 @@ def ultraGeneric(topic):
     reception = receptionParse(topic)              # call function that parses for the critical reception
     reception = reception.lstrip()                 #just in case gets rid of extra whitespace
     print ("Reception:" + reception)               #print
+    target.write("Reception:" + reception+"\n")
+    target.write("\n")
 
 
 def clean(word):                                    #makes sure strings are readable
@@ -90,12 +102,13 @@ def receptionParse(r):
 if __name__ == "__main__":
     print("Research Project Web Scraper'.")
     warnings.filterwarnings('ignore')
+    target = open('Research.txt', 'w')
 
     while(1):
          check = raw_input("Look up topics to reasearch: ")
          if(check == 'exit'):
                 break
          check = unidecode(check)
-         ultraGeneric(check)
+         ultraGeneric(check, target)
          print "type 'exit' to end reasearch"
 
